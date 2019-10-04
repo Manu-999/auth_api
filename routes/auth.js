@@ -21,7 +21,8 @@ const schema = {
 router.post('/register', async (req, res) => {
   // VALIDATING DATA BEOFRE
 
-  Joi.validate(req.body, schema);
+  const { error } = Joi.validate(req.body, schema);
+  if (error) return res.status(400).send(error.details[0].message);
 
   const user = new User({
     name: req.body.name,
