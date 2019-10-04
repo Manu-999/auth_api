@@ -1,12 +1,14 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 // Connect to DB
 
-mongoose.connect(
-  'mongodb+srv://manu:changeme@authapi-xc09g.mongodb.net/users?retryWrites=true&w=majority',
-  () => console.log('Connected to DB')
+mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true }, () =>
+  console.log('Connected to DB')
 );
 
 // Middlewares
