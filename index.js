@@ -4,8 +4,9 @@ const mongoose = require('mongoose');
 
 // Connect to DB
 
-mongoose.connect('mongodb://127.0.0.1:27017/authAPI', () =>
-  console.log('Connected to DB')
+mongoose.connect(
+  'mongodb+srv://manu:changeme@authapi-xc09g.mongodb.net/users?retryWrites=true&w=majority',
+  () => console.log('Connected to DB')
 );
 
 // Middlewares
