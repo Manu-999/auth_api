@@ -1,28 +1,18 @@
 const router = require('express').Router();
 const User = require('../models/User');
-
-// VALIDATION
-
-const Joi = require('@hapi/joi');
-
-const schema = {
-  name: Joi.string()
-    .min(6)
-    .required(),
-  email: Joi.string()
-    .min(6)
-    .required()
-    .email(),
-  password: Joi.string()
-    .min(6)
-    .required()
-};
+const { registerValidation } = require('../validation');
 
 router.post('/register', async (req, res) => {
   // VALIDATING DATA BEOFRE
-
-  const { error } = Joi.validate(req.body, schema);
+  const { error } = registerValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
+
+  // Checking if a user is already registered
+
+  const emailExist = await User.findOne({ email: req.body.email });
+  if (emailExist) return res.status(400).send('Email already registered');
+
+  // Creating a new User
 
   const user = new User({
     name: req.body.name,
@@ -33,8 +23,8 @@ router.post('/register', async (req, res) => {
   try {
     const savedUser = await user.save();
     res.send(savedUser);
-  } catch (error) {
-    res.status(400).send(error);
+  } catch (err) {
+    res.status(400).send(err);
   }
 });
 
